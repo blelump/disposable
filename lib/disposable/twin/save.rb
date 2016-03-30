@@ -5,6 +5,10 @@ class Disposable::Twin
       def save(model)
         model.save
       end
+
+      def persisted?(model)
+        model.persisted?
+      end
     end
     attr_reader :command
 

@@ -61,6 +61,46 @@ class PersistedTest < MiniTest::Spec
     twin.songs[1].changed?(:persisted?).must_equal true
   end
 
+  describe "#persisted? with custom command" do
+    class ArrayRepository < Array
+
+      def save(object)
+        self << object
+      end
+
+      def persisted?(object)
+        self.include?(object)
+      end
+
+    end
+
+    class CustomCommand
+
+      attr_reader :repository
+
+      def initialize(repository = ArrayRepository.new)
+        @repository = repository
+      end
+
+      def save(object)
+        repository.save(object)
+      end
+
+      def persisted?(object)
+        repository.persisted?(object)
+      end
+    end
+
+    it do
+      twin = AlbumTwin.new(Album.new, command: CustomCommand.new)
+
+      twin.persisted?.must_equal false
+      twin.save
+      twin.created?.must_equal true
+    end
+
+  end
+
 
   describe "#created?" do
     it do

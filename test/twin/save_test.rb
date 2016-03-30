@@ -182,7 +182,6 @@ class SaveTest < MiniTest::Spec
       def save(twin)
         repository.save(twin)
       end
-
     end
 
     it "uses default command" do
@@ -193,6 +192,7 @@ class SaveTest < MiniTest::Spec
 
     it "uses provided command" do
       repository = ArrayRepository.new
+
       twin = Twin::Album.new(album, command: CustomCommand.new(repository))
 
       fill_out!(twin)
