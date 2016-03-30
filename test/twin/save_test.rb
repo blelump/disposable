@@ -161,6 +161,50 @@ class SaveTest < MiniTest::Spec
     twin.songs[1].composer.name = "Lynott"
     twin.artist.name = "Thin Lizzy"
   end
+
+  describe "#command" do
+    class ArrayRepository < Array
+
+      def save(twin)
+        self << twin
+      end
+
+    end
+
+    class CustomCommand
+
+      attr_reader :repository
+
+      def initialize(repository = ArrayRepository.new)
+        @repository = repository
+      end
+
+      def save(twin)
+        repository.save(twin)
+      end
+
+    end
+
+    it "uses default command" do
+      twin = Twin::Album.new(album)
+
+      twin.command.must_be_instance_of Disposable::Twin::Save::Command
+    end
+
+    it "uses provided command" do
+      repository = ArrayRepository.new
+      twin = Twin::Album.new(album, command: CustomCommand.new(repository))
+
+      fill_out!(twin)
+      twin.save
+
+      twin.command.must_be_instance_of CustomCommand
+      repository.length.must_equal 1
+      repository.first.must_equal twin.model
+      repository.first.name.must_equal "Live And Dangerous"
+      repository.first.songs[0].title.must_equal "Southbound"
+    end
+  end
 end
 
 

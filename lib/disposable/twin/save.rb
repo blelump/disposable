@@ -1,5 +1,18 @@
 class Disposable::Twin
   module Save
+    class Command
+
+      def save(model)
+        model.save
+      end
+    end
+    attr_reader :command
+
+    def initialize(model, options={})
+      @command = options[:command] || Command.new
+      super
+    end
+
     # Returns the result of that save invocation on the model.
     def save(options={}, &block)
       res = sync(&block)
@@ -22,7 +35,7 @@ class Disposable::Twin
     end
 
     def save_model
-      model.save
+      command.save(model)
     end
   end
 end

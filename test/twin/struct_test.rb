@@ -98,6 +98,6 @@ class TwinWithNestedStructTest < MiniTest::Spec
 
 
   describe "#save" do
-    it { Song.new(model).extend(Disposable::Twin::Save).save }
+    it { Song.include(Disposable::Twin::Save).new(model).save }
   end
 end
