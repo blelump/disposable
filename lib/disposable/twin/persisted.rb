@@ -6,7 +6,7 @@ module Disposable::Twin::Persisted
 
   def save!(*)
     super.tap do
-      send "persisted?=", command.persisted?(model)
+      send "persisted?=", save_opts[:command].persisted?(model)
     end
   end
 

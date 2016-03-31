@@ -179,15 +179,15 @@ class SaveTest < MiniTest::Spec
         @repository = repository
       end
 
-      def save(twin)
-        repository.save(twin)
+      def save(model)
+        repository.save(model)
       end
     end
 
     it "uses default command" do
       twin = Twin::Album.new(album)
 
-      twin.command.must_be_instance_of Disposable::Twin::Save::Command
+      twin.save_opts[:command].must_be_instance_of Disposable::Twin::Save::DefaultCommand
     end
 
     it "uses provided command" do
@@ -198,8 +198,7 @@ class SaveTest < MiniTest::Spec
       fill_out!(twin)
       twin.save
 
-      twin.command.must_be_instance_of CustomCommand
-      repository.length.must_equal 1
+      repository.length.must_equal 5
       repository.first.must_equal twin.model
       repository.first.name.must_equal "Live And Dangerous"
       repository.first.songs[0].title.must_equal "Southbound"

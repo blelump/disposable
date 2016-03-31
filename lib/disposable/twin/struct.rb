@@ -25,7 +25,7 @@
       alias_method :sync!, :sync
 
       # So far, hashes can't be persisted separately.
-      def save!
+      def save!(options={})
       end
     end
   end

@@ -47,7 +47,7 @@ module Disposable
       end
 
     private
-      def save_model
+      def save_model(options = {})
         res = true
         mapper.each { |twin| res &= twin.save } # goes through all models in Composition.
         res
